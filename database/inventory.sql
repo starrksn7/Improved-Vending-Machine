@@ -14,11 +14,14 @@ CREATE SEQUENCE seq_transactions
 	NO MAXVALUE;
 
 CREATE TABLE transactions (
-	transaction_id varchar (1) NOT NULL DEFAULT nextval('seq_transactions'),
-	transaction_date_time varchar (50) NOT NULL,
+	transaction_id int NOT NULL DEFAULT nextval('seq_transactions'),
+	transaction_date_time varchar (30) NOT NULL,
 	action_taken varchar (20) NOT NULL,
-	transaction_amount decimal (5, 2) NOT NULL,
-	balance decimal (5, 2) NOT NULL	
+	transaction_amount decimal (5, 2) NOT NULL
+);
+
+CREATE TABLE balance (
+	balance_total decimal (5, 2) NOT NULL	
 );
 
 INSERT INTO items (location_code, item_name, item_cost, item_type, item_stock) VALUES ('A1', 'Potato Crisps', 3.05, 'Chips', 5);
@@ -37,5 +40,7 @@ INSERT INTO items (location_code, item_name, item_cost, item_type, item_stock) V
 INSERT INTO items (location_code, item_name, item_cost, item_type, item_stock) VALUES ('D2', 'Little League Chew', 0.95, 'Gum', 5);
 INSERT INTO items (location_code, item_name, item_cost, item_type, item_stock) VALUES ('D3', 'Chiclets', 0.75, 'Gum', 5);
 INSERT INTO items (location_code, item_name, item_cost, item_type, item_stock) VALUES ('D4', 'Triplemint', 0.75, 'Gum', 5);
+INSERT INTO balance (balance_total) VALUES (0.00);
+
 
 COMMIT;

@@ -7,18 +7,16 @@ public class Transaction {
     private int transaction_id;
     private String transactionDateTime;
     private String actionTaken;
-    private BigDecimal transactionAmount;
+    private BigDecimal transactionAmount = new BigDecimal("0.00");
+
     private BigDecimal balance = new BigDecimal("0.00");
 
     public Transaction() {};
 
-//    public Transaction(int transaction_id, String transactionDateTime, String actionTaken, BigDecimal transactionAmount, BigDecimal balance){
-//        this.transaction_id = transaction_id;
-//        this.transactionDateTime = transactionDateTime;
-//        this.actionTaken = actionTaken;
-//        this.transactionAmount = transactionAmount;
-//        this.balance = balance;
-//    }
+    public Transaction(BigDecimal transactionAmount){
+        this.transactionAmount = transactionAmount;
+    }
+
 
     public int getTransaction_id() {
         return transaction_id;
@@ -55,24 +53,10 @@ public class Transaction {
     public BigDecimal getBalance() {
         return balance;
     }
-
-    public void setBalance(BigDecimal balance) {
+    public void setBalance(BigDecimal balance){
         this.balance = balance;
     }
 
-    public String deposit(BigDecimal moneyInserted){
-        balance = balance.add(moneyInserted);
-        return String.format("Your balance is now %s", balance);
-    }
-
-    public String sell(BigDecimal itemCost){
-        if(balance.compareTo(itemCost) == 0 || balance.compareTo(itemCost) == 1) {
-            balance = balance.subtract(itemCost);
-            return String.format("Your balance is now %", balance);
-        } else {
-            return "You lack sufficient funds for that item.  Please make a deposit";
-        }
-    }
 
     public String giveChange(){
         BigDecimal quarterValue = new BigDecimal(".25");

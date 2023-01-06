@@ -1,17 +1,17 @@
 package com.ImprovedVendingMachine.improvedvendingmachine.dao;
 
-import com.ImprovedVendingMachine.improvedvendingmachine.model.Item;
 import com.ImprovedVendingMachine.improvedvendingmachine.model.Transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionDao {
 
     List<Transaction> listAllTransactions();
 
-    String depositMoney(Transaction transaction);
+    String depositMoney(BigDecimal transactionAmount);
 
-    String makeSale(Transaction transaction, Item item);
+    String makeSale(BigDecimal cost, String locationCode);
 
     void makeChange(Transaction transaction);
 }

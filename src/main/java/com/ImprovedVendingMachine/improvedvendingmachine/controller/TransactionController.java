@@ -1,13 +1,11 @@
 package com.ImprovedVendingMachine.improvedvendingmachine.controller;
 
+import com.ImprovedVendingMachine.improvedvendingmachine.dao.BankDao;
 import com.ImprovedVendingMachine.improvedvendingmachine.dao.ItemDao;
 import com.ImprovedVendingMachine.improvedvendingmachine.dao.TransactionDao;
 import com.ImprovedVendingMachine.improvedvendingmachine.model.Item;
 import com.ImprovedVendingMachine.improvedvendingmachine.model.Transaction;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,9 +16,12 @@ public class TransactionController {
     private ItemDao itemDao;
     private TransactionDao transactionDao;
 
-    public TransactionController(ItemDao itemDao, TransactionDao transactionDao){
+    private BankDao bankDao;
+
+    public TransactionController(ItemDao itemDao, TransactionDao transactionDao, BankDao bankDao){
         this.itemDao = itemDao;
         this.transactionDao = transactionDao;
+        this.bankDao = bankDao;
     }
 
     @GetMapping(path = "/all")
@@ -29,13 +30,13 @@ public class TransactionController {
     }
 
     @PostMapping(path = "/deposit")
-    public String depositMoney(Transaction transaction){
-        return transactionDao.depositMoney(transaction);
+    public String depositMoney(@RequestBody Transaction transaction){
+        return transactionDao.depositMoney(transaction.getTransactionAmount());
     }
 
     @PostMapping(path = "/sell")
-    public String makeSale(Transaction transaction, Item item){
-       return transactionDao.makeSale(transaction, item);
+    public String makeSale(@RequestBody Item item){
+       return transactionDao.makeSale(item.getCost(), item.getLocation());
     }
 
     @PostMapping(path = "/makeChange")
