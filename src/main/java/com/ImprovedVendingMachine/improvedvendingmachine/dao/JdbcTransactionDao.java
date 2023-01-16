@@ -64,16 +64,19 @@ public class JdbcTransactionDao implements TransactionDao {
 
     }
 
-    public String makeSale(BigDecimal cost, String location) {
+    public String makeSale(String location) {
+        Item item = new Item();
+
+        String sql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items " +
+                "WHERE location_code = ?;";
+
+        SqlRowSet itemResults = this.jdbcTemplate.queryForRowSet(sql, location);
+
+        if (itemResults.next()) {
+            item = mapRowToItem(itemResults);
+        }
 
         Bank balance = new Bank();
-
-        String checkStockSql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items WHERE location_code = '?';";
-        SqlRowSet itemSearchResults = this.jdbcTemplate.queryForRowSet(checkStockSql);
-        Item item = new Item();
-        if (itemSearchResults.next()) {
-            item = mapRowToItem(itemSearchResults);
-        }
 
         String returnBalanceSql = "SELECT balance_total FROM balance;";
         SqlRowSet balanceResults = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
@@ -82,17 +85,19 @@ public class JdbcTransactionDao implements TransactionDao {
             balance = mapToBank(balanceResults);
         }
 
+//        return String.format("Testing getItemStock, %s", item.getItemStock());
+
         if (item.getItemStock() > 0) {
             if (balance.getBalance().compareTo(item.getCost()) == 0 || balance.getBalance().compareTo(item.getCost()) == 1) {
                 String transactionSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
                         "VALUES (?, 'sale', ?); ";
-                jdbcTemplate.update(transactionSql, now, cost);
+                jdbcTemplate.update(transactionSql, now, item.getCost());
 
                 String updateStockSql = "UPDATE items SET item_stock = item_stock - 1 WHERE location_code = ?; ";
                 jdbcTemplate.update(updateStockSql, location);
 
                 String updateBalanceSql = "UPDATE balance SET balance_total = balance_total - ?;";
-                jdbcTemplate.update(updateBalanceSql, cost);
+                jdbcTemplate.update(updateBalanceSql, item.getCost());
 
                 String postSaleBalanceSql = "SELECT balance_total FROM balance;";
                 SqlRowSet updateBalanceAfterSaleRowSet = this.jdbcTemplate.queryForRowSet(postSaleBalanceSql);
@@ -116,16 +121,59 @@ public class JdbcTransactionDao implements TransactionDao {
 
     }
 
-    public void makeChange(Transaction transaction) {
+    public String makeChange() {
 
+        Bank balance = new Bank();
 
-        String sql = "INSERT INTO transactions (transaction_date_time, action_taken, prior_balance, new_balance" +
-                "VALUES (?, 'gave change', prior_balance, 0); ";
+        String returnBalanceSql = "SELECT balance_total FROM balance;";
+        SqlRowSet balanceResults = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
 
-        transaction.giveChange();
-        jdbcTemplate.update(sql, now);
+        if (balanceResults.next()){
+            balance = mapToBank(balanceResults);
+        }
 
+        String sql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
+                "VALUES (?, 'gave change', ?); ";
+
+        jdbcTemplate.update(sql, now, balance.getBalance());
+
+        String zeroBalanceSql = "UPDATE balance SET balance_total = 0.00;";
+        jdbcTemplate.update(zeroBalanceSql);
+
+        BigDecimal quarterValue = new BigDecimal(".25");
+        BigDecimal dimeValue = new BigDecimal(".10");
+        BigDecimal nickelValue = new BigDecimal(".05");
+        BigDecimal pennyValue = new BigDecimal(".01");
+        int numOfQuarters = 0;
+        int numOfDimes = 0;
+        int numOfNickels = 0;
+        int numOfPennies = 0;
+        BigDecimal moneyToReturn = balance.getBalance();
+
+        while(true){
+            if(moneyToReturn.compareTo(quarterValue) == 0 || moneyToReturn.compareTo(quarterValue) == 1){
+                moneyToReturn = moneyToReturn.subtract(quarterValue);
+                numOfQuarters++;
+            } else if (moneyToReturn.compareTo(dimeValue) == 0 || moneyToReturn.compareTo(dimeValue) == 1){
+                moneyToReturn = moneyToReturn.subtract(dimeValue);
+                numOfDimes++;
+            } else if (moneyToReturn.compareTo(nickelValue) == 0 || moneyToReturn.compareTo(nickelValue) == 1){
+                moneyToReturn = moneyToReturn.subtract(nickelValue);
+                numOfNickels++;
+            } else if (moneyToReturn.compareTo(pennyValue) == 0 || moneyToReturn.compareTo(pennyValue) == 1){
+                moneyToReturn = moneyToReturn.subtract(pennyValue);
+                numOfPennies++;
+            } else {
+                break;
+            }
+        }
+
+        return String.format("Your change is %s quarters, %s dimes, %s nickels, and %s pennies", numOfQuarters, numOfDimes, numOfNickels, numOfPennies) ;
     }
+
+
+
+
 
     private Transaction mapRowToTransaction(SqlRowSet rowSet) {
         Transaction transaction = new Transaction();

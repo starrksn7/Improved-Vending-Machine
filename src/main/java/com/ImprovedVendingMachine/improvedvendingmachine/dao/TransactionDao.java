@@ -11,7 +11,7 @@ public interface TransactionDao {
 
     String depositMoney(BigDecimal transactionAmount);
 
-    String makeSale(BigDecimal cost, String locationCode);
+    String makeSale(String locationCode);
 
-    void makeChange(Transaction transaction);
+    String makeChange();
 }

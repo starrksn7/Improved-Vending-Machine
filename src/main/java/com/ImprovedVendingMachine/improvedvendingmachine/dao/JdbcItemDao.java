@@ -32,12 +32,12 @@ public class JdbcItemDao implements ItemDao {
     }
 
     public int checkStock(String itemLocation) {
-        Item item = new Item();
+        Item item = null;
 
         String sql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items " +
                 "WHERE location_code = ?;";
 
-        SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, itemLocation);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, itemLocation);
 
         if (results.next()) {
             item = mapRowToItem(results);
