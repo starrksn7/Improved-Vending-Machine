@@ -21,7 +21,7 @@ public class JdbcItemDao implements ItemDao {
     public List<Item> listAllItems() {
         List<Item> items = new ArrayList<>();
 
-        String sql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items;";
+        String sql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items ORDER BY location_code;";
         SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql);
 
         while (results.next()) {

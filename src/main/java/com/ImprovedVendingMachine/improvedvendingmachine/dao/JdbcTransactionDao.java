@@ -168,6 +168,9 @@ public class JdbcTransactionDao implements TransactionDao {
             }
         }
 
+        String restockItemsSql = "UPDATE items SET item_stock = 5 WHERE item_stock < 5;";
+        jdbcTemplate.update(restockItemsSql);
+
         return String.format("Your change is %s quarters, %s dimes, %s nickels, and %s pennies", numOfQuarters, numOfDimes, numOfNickels, numOfPennies) ;
     }
 

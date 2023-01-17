@@ -9,7 +9,7 @@ public class Transaction {
     private String actionTaken;
     private BigDecimal transactionAmount = new BigDecimal("0.00");
 
-    private BigDecimal balance = new BigDecimal("0.00");
+    
 
     public Transaction() {};
 
@@ -50,11 +50,6 @@ public class Transaction {
         this.transactionAmount = transactionAmount;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
-    public void setBalance(BigDecimal balance){
-        this.balance = balance;
-    }
+
 
  }
