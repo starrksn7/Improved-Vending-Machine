@@ -9,7 +9,7 @@ public class Transaction {
     private String actionTaken;
     private BigDecimal transactionAmount = new BigDecimal("0.00");
 
-    
+
 
     public Transaction() {};
 
