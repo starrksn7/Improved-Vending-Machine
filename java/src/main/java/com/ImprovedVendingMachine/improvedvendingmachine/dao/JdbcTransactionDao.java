@@ -43,28 +43,39 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactions;
     }
 
-    public String depositMoney(BigDecimal transactionAmount) {
-
+    public String depositMoney(BigDecimal transactionAmount) throws IllegalArgumentException {
+        BigDecimal zero = new BigDecimal("0.00");
         Bank balance = new Bank();
         String insertSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
                 "VALUES (?, 'deposit', ?); ";
-        jdbcTemplate.update(insertSql, now, transactionAmount);
 
         String updateSql = "UPDATE balance SET balance_total = balance_total + ?;";
-        jdbcTemplate.update(updateSql, transactionAmount);
 
         String returnBalanceSql = "SELECT balance_total FROM balance;";
-        SqlRowSet results = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
 
-        if (results.next()){
-            balance = mapToBank(results);
+        if(transactionAmount.compareTo(zero) < 0) {
+            return "That is not a valid amount";
+        } else {
+            try {
+                jdbcTemplate.update(insertSql, now, transactionAmount);
+                jdbcTemplate.update(updateSql, transactionAmount);
+
+                SqlRowSet results = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
+                if (results.next()){
+                    balance = mapToBank(results);
+                }
+            } catch (IllegalArgumentException e){
+                return "Please enter a valid amount to deposit.";
+            }
         }
 
         return String.format("Your balance is %s", balance.getBalance());
 
     }
 
-    public String makeSale(String location) {
+    public String makeSale(String location) throws IllegalArgumentException {
+        int locationCodeLength = 2;
+
         Item item = new Item();
 
         String sql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items " +
@@ -85,40 +96,45 @@ public class JdbcTransactionDao implements TransactionDao {
             balance = mapToBank(balanceResults);
         }
 
-//        return String.format("Testing getItemStock, %s", item.getItemStock());
+        if(listAllTransactions().contains(location)){
+            try {
+                if (item.getItemStock() > 0) {
+                    if (balance.getBalance().compareTo(item.getCost()) == 0 || balance.getBalance().compareTo(item.getCost()) == 1) {
+                        String transactionSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
+                                "VALUES (?, 'sale', ?); ";
+                        jdbcTemplate.update(transactionSql, now, item.getCost());
 
-        if (item.getItemStock() > 0) {
-            if (balance.getBalance().compareTo(item.getCost()) == 0 || balance.getBalance().compareTo(item.getCost()) == 1) {
-                String transactionSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
-                        "VALUES (?, 'sale', ?); ";
-                jdbcTemplate.update(transactionSql, now, item.getCost());
+                        String updateStockSql = "UPDATE items SET item_stock = item_stock - 1 WHERE location_code = ?; ";
+                        jdbcTemplate.update(updateStockSql, location);
 
-                String updateStockSql = "UPDATE items SET item_stock = item_stock - 1 WHERE location_code = ?; ";
-                jdbcTemplate.update(updateStockSql, location);
+                        String updateBalanceSql = "UPDATE balance SET balance_total = balance_total - ?;";
+                        jdbcTemplate.update(updateBalanceSql, item.getCost());
 
-                String updateBalanceSql = "UPDATE balance SET balance_total = balance_total - ?;";
-                jdbcTemplate.update(updateBalanceSql, item.getCost());
+                        String postSaleBalanceSql = "SELECT balance_total FROM balance;";
+                        SqlRowSet updateBalanceAfterSaleRowSet = this.jdbcTemplate.queryForRowSet(postSaleBalanceSql);
 
-                String postSaleBalanceSql = "SELECT balance_total FROM balance;";
-                SqlRowSet updateBalanceAfterSaleRowSet = this.jdbcTemplate.queryForRowSet(postSaleBalanceSql);
+                        if (updateBalanceAfterSaleRowSet.next()){
+                            balance = mapToBank(updateBalanceAfterSaleRowSet);
+                        }
 
-                if (updateBalanceAfterSaleRowSet.next()){
-                    balance = mapToBank(updateBalanceAfterSaleRowSet);
-                }
-
-                if (item.getLocation().contains("A")) {
-                    return String.format("Crunch, Crunch Yum! Your balance is %s", balance.getBalance());
-                } else if (item.getLocation().contains("B")) {
-                    return String.format("Munch, Munch, Yum! Your balance is %s", balance.getBalance());
-                } else if (item.getLocation().contains("C")) {
-                    return String.format("Glug, Glug Yum! Your balance is %s", balance.getBalance());
+                        if (item.getLocation().contains("A")) {
+                            return String.format("Crunch, Crunch Yum! Your balance is %s", balance.getBalance());
+                        } else if (item.getLocation().contains("B")) {
+                            return String.format("Munch, Munch, Yum! Your balance is %s", balance.getBalance());
+                        } else if (item.getLocation().contains("C")) {
+                            return String.format("Glug, Glug Yum! Your balance is %s", balance.getBalance());
+                        } else {
+                            return String.format("Chew, Chew Yum! Your balance is %s", balance.getBalance());
+                        }
+                    }
                 } else {
-                    return String.format("Chew, Chew Yum! Your balance is %s", balance.getBalance());
+                    return "That item is currently out of stock";
                 }
+            } catch (IllegalArgumentException e){
+                return "Please enter a valid item location.";
             }
         }
-            return "That item is currently out of stock";
-
+        return "Please select a valid item.";
     }
 
     public String makeChange() {
