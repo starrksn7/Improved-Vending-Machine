@@ -53,9 +53,7 @@ public class JdbcTransactionDao implements TransactionDao {
 
         String returnBalanceSql = "SELECT balance_total FROM balance;";
 
-        if(transactionAmount.compareTo(zero) < 0) {
-            return "That is not a valid amount";
-        } else {
+
             try {
                 jdbcTemplate.update(insertSql, now, transactionAmount);
                 jdbcTemplate.update(updateSql, transactionAmount);
@@ -67,7 +65,6 @@ public class JdbcTransactionDao implements TransactionDao {
             } catch (IllegalArgumentException e){
                 return "Please enter a valid amount to deposit.";
             }
-        }
 
         return String.format("Your balance is %s", balance.getBalance());
 
