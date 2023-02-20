@@ -43,7 +43,7 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactions;
     }
 
-    public String depositMoney(BigDecimal transactionAmount) throws IllegalArgumentException {
+    public String depositMoney(BigDecimal transactionAmount) {
         BigDecimal zero = new BigDecimal("0.00");
         Bank balance = new Bank();
         String insertSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
@@ -54,25 +54,20 @@ public class JdbcTransactionDao implements TransactionDao {
         String returnBalanceSql = "SELECT balance_total FROM balance;";
 
 
-            try {
-                jdbcTemplate.update(insertSql, now, transactionAmount);
-                jdbcTemplate.update(updateSql, transactionAmount);
+        jdbcTemplate.update(insertSql, now, transactionAmount);
+        jdbcTemplate.update(updateSql, transactionAmount);
 
-                SqlRowSet results = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
-                if (results.next()){
-                    balance = mapToBank(results);
-                }
-            } catch (IllegalArgumentException e){
-                return "Please enter a valid amount to deposit.";
-            }
+        SqlRowSet results = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
+
+        if (results.next()) {
+            balance = mapToBank(results);
+        }
 
         return String.format("Your balance is %s", balance.getBalance());
 
     }
 
-    public String makeSale(String location) throws IllegalArgumentException {
-        int locationCodeLength = 2;
-
+    public String makeSale(String location) {
         Item item = new Item();
 
         String sql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items " +
@@ -82,6 +77,8 @@ public class JdbcTransactionDao implements TransactionDao {
 
         if (itemResults.next()) {
             item = mapRowToItem(itemResults);
+        } else {
+            return "Please select a valid item";
         }
 
         Bank balance = new Bank();
@@ -89,49 +86,46 @@ public class JdbcTransactionDao implements TransactionDao {
         String returnBalanceSql = "SELECT balance_total FROM balance;";
         SqlRowSet balanceResults = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
 
-        if (balanceResults.next()){
+        if (balanceResults.next()) {
             balance = mapToBank(balanceResults);
         }
 
-        if(listAllTransactions().contains(location)){
-            try {
-                if (item.getItemStock() > 0) {
-                    if (balance.getBalance().compareTo(item.getCost()) == 0 || balance.getBalance().compareTo(item.getCost()) == 1) {
-                        String transactionSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
-                                "VALUES (?, 'sale', ?); ";
-                        jdbcTemplate.update(transactionSql, now, item.getCost());
 
-                        String updateStockSql = "UPDATE items SET item_stock = item_stock - 1 WHERE location_code = ?; ";
-                        jdbcTemplate.update(updateStockSql, location);
+        if (item.getItemStock() > 0) {
 
-                        String updateBalanceSql = "UPDATE balance SET balance_total = balance_total - ?;";
-                        jdbcTemplate.update(updateBalanceSql, item.getCost());
+            if (balance.getBalance().compareTo(item.getCost()) == 0 || balance.getBalance().compareTo(item.getCost()) == 1) {
+                String transactionSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
+                        "VALUES (?, 'sale', ?); ";
+                jdbcTemplate.update(transactionSql, now, item.getCost());
 
-                        String postSaleBalanceSql = "SELECT balance_total FROM balance;";
-                        SqlRowSet updateBalanceAfterSaleRowSet = this.jdbcTemplate.queryForRowSet(postSaleBalanceSql);
+                String updateStockSql = "UPDATE items SET item_stock = item_stock - 1 WHERE location_code = ?; ";
+                jdbcTemplate.update(updateStockSql, location);
 
-                        if (updateBalanceAfterSaleRowSet.next()){
-                            balance = mapToBank(updateBalanceAfterSaleRowSet);
-                        }
+                String updateBalanceSql = "UPDATE balance SET balance_total = balance_total - ?;";
+                jdbcTemplate.update(updateBalanceSql, item.getCost());
 
-                        if (item.getLocation().contains("A")) {
-                            return String.format("Crunch, Crunch Yum! Your balance is %s", balance.getBalance());
-                        } else if (item.getLocation().contains("B")) {
-                            return String.format("Munch, Munch, Yum! Your balance is %s", balance.getBalance());
-                        } else if (item.getLocation().contains("C")) {
-                            return String.format("Glug, Glug Yum! Your balance is %s", balance.getBalance());
-                        } else {
-                            return String.format("Chew, Chew Yum! Your balance is %s", balance.getBalance());
-                        }
-                    }
-                } else {
-                    return "That item is currently out of stock";
+                String postSaleBalanceSql = "SELECT balance_total FROM balance;";
+                SqlRowSet updateBalanceAfterSaleRowSet = this.jdbcTemplate.queryForRowSet(postSaleBalanceSql);
+
+                if (updateBalanceAfterSaleRowSet.next()) {
+                    balance = mapToBank(updateBalanceAfterSaleRowSet);
                 }
-            } catch (IllegalArgumentException e){
-                return "Please enter a valid item location.";
+
+                if (item.getLocation().contains("A")) {
+                    return String.format("Crunch, Crunch Yum! Your balance is %s", balance.getBalance());
+                } else if (item.getLocation().contains("B")) {
+                    return String.format("Munch, Munch, Yum! Your balance is %s", balance.getBalance());
+                } else if (item.getLocation().contains("C")) {
+                    return String.format("Glug, Glug Yum! Your balance is %s", balance.getBalance());
+                } else {
+                    return String.format("Chew, Chew Yum! Your balance is %s", balance.getBalance());
+                }
+            } else {
+                return String.format("You do not have enough deposited for that item.  Please deposit %s", item.getCost().subtract(balance.getBalance()));
             }
+        } else {
+            return "That item is currently out of stock";
         }
-        return "Please select a valid item.";
     }
 
     public String makeChange() {
@@ -141,7 +135,7 @@ public class JdbcTransactionDao implements TransactionDao {
         String returnBalanceSql = "SELECT balance_total FROM balance;";
         SqlRowSet balanceResults = this.jdbcTemplate.queryForRowSet(returnBalanceSql);
 
-        if (balanceResults.next()){
+        if (balanceResults.next()) {
             balance = mapToBank(balanceResults);
         }
 
@@ -163,17 +157,17 @@ public class JdbcTransactionDao implements TransactionDao {
         int numOfPennies = 0;
         BigDecimal moneyToReturn = balance.getBalance();
 
-        while(true){
-            if(moneyToReturn.compareTo(quarterValue) == 0 || moneyToReturn.compareTo(quarterValue) == 1){
+        while (true) {
+            if (moneyToReturn.compareTo(quarterValue) == 0 || moneyToReturn.compareTo(quarterValue) == 1) {
                 moneyToReturn = moneyToReturn.subtract(quarterValue);
                 numOfQuarters++;
-            } else if (moneyToReturn.compareTo(dimeValue) == 0 || moneyToReturn.compareTo(dimeValue) == 1){
+            } else if (moneyToReturn.compareTo(dimeValue) == 0 || moneyToReturn.compareTo(dimeValue) == 1) {
                 moneyToReturn = moneyToReturn.subtract(dimeValue);
                 numOfDimes++;
-            } else if (moneyToReturn.compareTo(nickelValue) == 0 || moneyToReturn.compareTo(nickelValue) == 1){
+            } else if (moneyToReturn.compareTo(nickelValue) == 0 || moneyToReturn.compareTo(nickelValue) == 1) {
                 moneyToReturn = moneyToReturn.subtract(nickelValue);
                 numOfNickels++;
-            } else if (moneyToReturn.compareTo(pennyValue) == 0 || moneyToReturn.compareTo(pennyValue) == 1){
+            } else if (moneyToReturn.compareTo(pennyValue) == 0 || moneyToReturn.compareTo(pennyValue) == 1) {
                 moneyToReturn = moneyToReturn.subtract(pennyValue);
                 numOfPennies++;
             } else {
@@ -184,11 +178,8 @@ public class JdbcTransactionDao implements TransactionDao {
         String restockItemsSql = "UPDATE items SET item_stock = 5 WHERE item_stock < 5;";
         jdbcTemplate.update(restockItemsSql);
 
-        return String.format("Your change is %s quarters, %s dimes, %s nickels, and %s pennies", numOfQuarters, numOfDimes, numOfNickels, numOfPennies) ;
+        return String.format("Your change is %s quarters, %s dimes, %s nickels, and %s pennies", numOfQuarters, numOfDimes, numOfNickels, numOfPennies);
     }
-
-
-
 
 
     private Transaction mapRowToTransaction(SqlRowSet rowSet) {
@@ -210,7 +201,7 @@ public class JdbcTransactionDao implements TransactionDao {
         return item;
     }
 
-    private Bank mapToBank(SqlRowSet rowSet){
+    private Bank mapToBank(SqlRowSet rowSet) {
         Bank balance = new Bank();
 
         balance.setBalance(rowSet.getBigDecimal("balance_total"));

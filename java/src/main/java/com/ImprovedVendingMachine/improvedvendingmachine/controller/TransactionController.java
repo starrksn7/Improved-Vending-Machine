@@ -5,6 +5,7 @@ import com.ImprovedVendingMachine.improvedvendingmachine.dao.ItemDao;
 import com.ImprovedVendingMachine.improvedvendingmachine.dao.TransactionDao;
 import com.ImprovedVendingMachine.improvedvendingmachine.model.Item;
 import com.ImprovedVendingMachine.improvedvendingmachine.model.Transaction;
+import com.fasterxml.jackson.core.JsonParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +31,9 @@ public class TransactionController {
     }
 
     @PostMapping(path = "/deposit")
-    public String depositMoney(@RequestBody Transaction transaction){
-        return transactionDao.depositMoney(transaction.getTransactionAmount());
-    }
+    public String depositMoney(@RequestBody Transaction transaction) throws JsonParseException {
+            return transactionDao.depositMoney(transaction.getTransactionAmount());
+        }
 
     @PostMapping(path = "/sell")
     public String makeSale(@RequestBody Item item){
