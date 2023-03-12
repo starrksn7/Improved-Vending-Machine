@@ -4,7 +4,7 @@ import axios from 'axios';
 const transactionContext = createContext();
 
 function Provider({children}) {
-    const [transaction, setTransaction] = useState([]);
+    const [transactions, setTransaction] = useState([]);
 
     const depositMoney = useCallback(async (amount) => {
         const response = await axios.post('http://localhost:8080/deposit');
@@ -22,5 +22,19 @@ function Provider({children}) {
         const response = await axios.post('http://localhost:8080/makeChange');
 
         setTransaction(response.data);
-    })
+    });
+
+    const valueToShare = {
+        transactions,
+        depositMoney,
+        makeSale,
+        makeChange
+    }
+
+    return <transactionContext.Provider value={valueToShare}>
+        {children}
+    </transactionContext.Provider>
 }
+
+export {Provider}
+export default transactionContext;

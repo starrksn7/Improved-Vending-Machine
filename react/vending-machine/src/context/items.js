@@ -12,5 +12,15 @@ function Provider({children}) {
         setItems(response.data);
     });
 
-    
+    const valueToShare = {
+        items,
+        fetchItems
+    }
+
+    return <itemContext.Provider value={valueToShare}>
+        {children}
+    </itemContext.Provider>
 }
+
+export {Provider};
+export default itemContext;
