@@ -10,19 +10,19 @@ function Provider({children}) {
         const response = await axios.post('http://localhost:8080/deposit');
 
         setTransaction(response.data);
-    });
+    }, []);
 
     const makeSale = useCallback(async (itemId) => {
         const response = await axios.post('http://localhost:8080/sell');
 
         setTransaction(response.data);
-    });
+    }, []);
 
     const makeChange = useCallback(async () => {
         const response = await axios.post('http://localhost:8080/makeChange');
 
         setTransaction(response.data);
-    });
+    }, []);
 
     const valueToShare = {
         transactions,

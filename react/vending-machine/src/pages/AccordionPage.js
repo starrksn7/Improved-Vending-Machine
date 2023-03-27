@@ -1,4 +1,6 @@
 import Accordion from "../components/Accordion"
+import ItemList from "../components/ItemList";
+
 
 function AccordionPage() {
     const sections = [
@@ -10,7 +12,7 @@ function AccordionPage() {
         {
             id: 2,
             label: "Purchase Items",
-            content: <div>Purchase Items functions go here</div>
+            content: <div><ItemList /></div>
         },
         {
             id: 3,
@@ -18,6 +20,8 @@ function AccordionPage() {
             content: <div>Give Change functions go here</div>
         }    
     ];
+
+    
 
     return <Accordion sections={sections} />
 
