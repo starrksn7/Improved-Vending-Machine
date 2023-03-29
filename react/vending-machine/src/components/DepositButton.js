@@ -1,10 +1,10 @@
 import {useState} from 'react';
-import useTransactionContext from '../context/transactions'
+import useMachineContext from '../context/machine'
 
 function DepositButton () {
 
     const {amount, setAmount} = useState();
-    const {depositMoney} = useTransactionContext;
+    const {depositMoney} = useMachineContext;
 
     const onClick = (event) =>{
         depositMoney(amount);

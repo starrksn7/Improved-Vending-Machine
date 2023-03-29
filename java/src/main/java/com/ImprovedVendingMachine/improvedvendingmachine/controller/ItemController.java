@@ -3,15 +3,14 @@ package com.ImprovedVendingMachine.improvedvendingmachine.controller;
 import com.ImprovedVendingMachine.improvedvendingmachine.dao.TransactionDao;
 import com.ImprovedVendingMachine.improvedvendingmachine.dao.ItemDao;
 import com.ImprovedVendingMachine.improvedvendingmachine.model.Item;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
+@CrossOrigin
+
 public class ItemController {
     private ItemDao itemDao;
     private TransactionDao transactionDao;

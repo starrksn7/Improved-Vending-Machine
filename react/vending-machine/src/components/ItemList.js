@@ -1,8 +1,8 @@
 import ItemShow from "./ItemShow";
-import useItemsContext from "../hooks/use-item-context";
+import useMachineContext from "../hooks/use-machine-context";
 
 function ItemList(){
-    const {items} = useItemsContext();
+    const {items} = useMachineContext();
 
     const renderedItems = items.map((item) => {
         return <ItemShow key={item.location} item={item} />

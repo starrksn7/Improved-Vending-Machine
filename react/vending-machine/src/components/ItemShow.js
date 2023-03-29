@@ -1,8 +1,8 @@
-import useTransactionsContext from '../hooks/use-transaction-context';
+import useMachineContext from '../hooks/use-machine-context';
 
 function ItemShow({item}){
 
-    const { makeSale } = useTransactionsContext;
+    const { makeSale } = useMachineContext;
     
     const handleClick = () => {
         makeSale(item.location);
