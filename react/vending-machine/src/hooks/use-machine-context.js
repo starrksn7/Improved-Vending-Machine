@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import machineContext from "../context/machine";
+import MachineContext from "../context/machine";
 
 function useMachineContext(){
-    return useContext(machineContext);
+    return useContext(MachineContext);
 }
 
 export default useMachineContext;

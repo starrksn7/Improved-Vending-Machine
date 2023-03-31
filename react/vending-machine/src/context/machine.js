@@ -1,16 +1,13 @@
 import { createContext, useState, useCallback } from 'react';
 import axios from 'axios';
 
-const machineContext = createContext();
-
-const itemContext = createContext();
+const MachineContext = createContext();
 
 function Provider({children}) {
     const [items, setItems] = useState([]);
 
     const fetchItems = useCallback(async () => {
         const response = await axios.get('http://localhost:8080/items');
-
         setItems(response.data);
     }, []);
 
@@ -43,11 +40,11 @@ function Provider({children}) {
         fetchItems
     }
 
-    return <machineContext.Provider value={valueToShare}>
+    return <MachineContext.Provider value={valueToShare}>
         {children}
-    </machineContext.Provider>
+    </MachineContext.Provider>
 }
 
 export {Provider};
-export default itemContext;
+export default MachineContext;
 

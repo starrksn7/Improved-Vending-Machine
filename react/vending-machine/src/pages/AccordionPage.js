@@ -1,8 +1,16 @@
 import Accordion from "../components/Accordion"
 import ItemList from "../components/ItemList";
-
+import MachineContext from "../context/machine";
+import {useEffect, useContext} from 'react';
 
 function AccordionPage() {
+
+    const {fetchItems} = useContext(MachineContext);
+
+    useEffect(() => {
+        fetchItems();
+    }, [fetchItems])
+
     const sections = [
         {
             id: 1,

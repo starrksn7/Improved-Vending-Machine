@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/items")
-@CrossOrigin
+@CrossOrigin("http://localhost:3000")
 
 public class ItemController {
     private ItemDao itemDao;

@@ -2,7 +2,7 @@ import useMachineContext from '../hooks/use-machine-context';
 
 function ItemShow({item}){
 
-    const { makeSale } = useMachineContext;
+    const { makeSale } = useMachineContext();
     
     const handleClick = () => {
         makeSale(item.location);
@@ -10,11 +10,11 @@ function ItemShow({item}){
     
     return (
         <div>
-            <h2>{item.location}</h2>
-            <h2>{item.itemName}</h2>
-            <h2>{item.itemType}</h2>
-            <h2>{item.cost}</h2>
-            <h2>{item.itemStock}</h2>
+            <div>{item.location}</div>
+            <div>{item.itemName}</div>
+            <div>{item.itemType}</div>
+            <div>{item.cost}</div>
+            <div>{item.itemStock}</div>
             <button onClick={handleClick}>Purchase</button>
         </div>
     )
