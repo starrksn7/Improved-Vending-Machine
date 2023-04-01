@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transaction")
-@CrossOrigin("http://localhost:3000")
+//@CrossOrigin(origins = "*")
 
 public class TransactionController {
 

@@ -14,19 +14,19 @@ function Provider({children}) {
     const [transactions, setTransaction] = useState([]);
 
     const depositMoney = useCallback(async (amount) => {
-        const response = await axios.post('http://localhost:8080/deposit');
+        const response = await axios.post('http://localhost:8080/transaction/deposit');
 
         setTransaction(response.data);
     }, []);
 
     const makeSale = useCallback(async (itemId) => {
-        const response = await axios.post('http://localhost:8080/sell');
+        const response = await axios.post('http://localhost:8080/transaction/sell');
 
         setTransaction(response.data);
     }, []);
 
     const makeChange = useCallback(async () => {
-        const response = await axios.post('http://localhost:8080/makeChange');
+        const response = await axios.post('http://localhost:8080/transaction/makeChange');
 
         setTransaction(response.data);
     }, []);
