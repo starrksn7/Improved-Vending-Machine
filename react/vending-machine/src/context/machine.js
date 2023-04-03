@@ -11,30 +11,36 @@ function Provider({children}) {
         setItems(response.data);
     }, []);
 
-    const [transactions, setTransaction] = useState([]);
+    const[balance, setBalance] = useState([]);
 
-    const depositMoney = useCallback(async (amount) => {
-        const response = await axios.post('http://localhost:8080/transaction/deposit');
+    const deposit = async (amount) => {
+        await axios.post('http://localhost:8080/transaction/deposit', {
+            transactionAmount: amount
+        });
+    };
 
-        setTransaction(response.data);
-    }, []);
+    const makeSale = useCallback(async (location) => {
+        const response = await axios.post('http://localhost:8080/transaction/sell', {
+            location
+        });
 
-    const makeSale = useCallback(async (itemId) => {
-        const response = await axios.post('http://localhost:8080/transaction/sell');
-
-        setTransaction(response.data);
-    }, []);
+        const updatedItems = [
+            ...items,
+            response.data
+        ];
+        setItems(updatedItems)
+    }, [items]);
 
     const makeChange = useCallback(async () => {
         const response = await axios.post('http://localhost:8080/transaction/makeChange');
 
-        setTransaction(response.data);
+        setBalance(response.data);
     }, []);
 
     const valueToShare = {
         items,
-        transactions,
-        depositMoney,
+        balance,
+        deposit,
         makeSale,
         makeChange,
         fetchItems

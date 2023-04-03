@@ -1,21 +1,26 @@
 import Accordion from "../components/Accordion"
 import ItemList from "../components/ItemList";
 import MachineContext from "../context/machine";
+import DepositButton from "../components/DepositButton";
 import {useEffect, useContext} from 'react';
 
 function AccordionPage() {
 
-    const {fetchItems} = useContext(MachineContext);
+    const {fetchItems, deposit} = useContext(MachineContext);
 
     useEffect(() => {
         fetchItems();
     }, [fetchItems])
 
+    useEffect((amount) => {
+        deposit(amount)
+    }, [deposit])
+
     const sections = [
         {
             id: 1,
             label: "Deposit Money",
-            content: <div>Deposit Money functions go here</div>
+            content: <div><DepositButton /></div>
         },
         {
             id: 2,

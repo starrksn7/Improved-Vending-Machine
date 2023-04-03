@@ -1,22 +1,23 @@
-import {useState} from 'react';
-import useMachineContext from '../context/machine'
+import useMachineContext from '../hooks/use-machine-context'
 
-function DepositButton () {
+function DepositButton() {
 
-    const {amount, setAmount} = useState();
-    const {depositMoney} = useMachineContext;
 
-    const onClick = (event) =>{
-        depositMoney(amount);
+    const {deposit} = useMachineContext();
+
+    const handleClick = (amount) =>{
+        deposit(amount);
 
     };
 
-    //This will accept the value for the button, but it needs to have the correct $$ value passed down to it from the 
-    //content portion of the sections array in the AccordionPage.  I believe it can be passed in by giving the button
-    //a value prop and having a specific number listed for each button.  
-    return (
-        <div onClick={onClick}>
-            <button>Deposit ${amount}</button>
+    /* This is adding to the balance only when the accordion for the deposting money
+    is opened.  the button itself isn't adding anything to the balance.  This also
+    happened when there were multiple buttons and opening the deposit money div 
+    added all of their amounts to the total. */
+    return (<div>
+        <div onClick={handleClick(1)}>
+            <button>Deposit $1</button>
+        </div>
         </div>
     )
 }

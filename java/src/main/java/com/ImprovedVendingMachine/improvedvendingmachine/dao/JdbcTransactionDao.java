@@ -61,6 +61,8 @@ public class JdbcTransactionDao implements TransactionDao {
 
         if (results.next()) {
             balance = mapToBank(results);
+        } else {
+            return "Please enter a valid amount.";
         }
 
         return String.format("Your balance is %s", balance.getBalance());

@@ -5,7 +5,7 @@ function ItemShow({item}){
     const { makeSale } = useMachineContext();
     
     const handleClick = () => {
-        makeSale(item.location);
+        makeSale(item);
     };
     
     return (
