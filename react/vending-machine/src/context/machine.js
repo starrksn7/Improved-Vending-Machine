@@ -12,13 +12,14 @@ function Provider({children}) {
     }, []);
 
     const[balance, setBalance] = useState([]);
-
+   
     const deposit = async (amount) => {
         await axios.post('http://localhost:8080/transaction/deposit', {
             transactionAmount: amount
         });
+        
     };
-
+    
     const makeSale = useCallback(async (location) => {
         const response = await axios.post('http://localhost:8080/transaction/sell', {
             location

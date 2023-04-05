@@ -1,7 +1,7 @@
 import Accordion from "../components/Accordion"
 import ItemList from "../components/ItemList";
 import MachineContext from "../context/machine";
-import DepositButton from "../components/DepositButton";
+import DepositPage from "../components/DepositPage";
 import {useEffect, useContext} from 'react';
 
 function AccordionPage() {
@@ -20,7 +20,7 @@ function AccordionPage() {
         {
             id: 1,
             label: "Deposit Money",
-            content: <div><DepositButton /></div>
+            content: <div><DepositPage /></div>
         },
         {
             id: 2,
