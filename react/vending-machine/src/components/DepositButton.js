@@ -5,16 +5,18 @@ function DepositButton() {
 
     const {deposit} = useMachineContext();
 
-    const handleClick = (event, amount) =>{
+    const handleDeposit = amount => event =>{
         event.preventDefault();
         deposit(amount);
-
-
     };
 
     return (    
-        
-            <button onClick={handleClick(1)}>Deposit $1</button>
+        <div>
+            <button onClick={handleDeposit(1)}>Deposit $1</button>
+            <button onClick={handleDeposit(2)}>Deposit $2</button>
+            <button onClick={handleDeposit(5)}>Deposit $5</button>
+        </div>
+            
    
     )
 }

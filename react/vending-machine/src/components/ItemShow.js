@@ -4,8 +4,10 @@ function ItemShow({item}){
 
     const { makeSale } = useMachineContext();
     
-    const handleClick = () => {
-        makeSale(item);
+    const handleClick = location => event => {
+        // event.preventDefault();
+        makeSale(location);
+        console.log(location);
     };
     
     return (
@@ -15,7 +17,7 @@ function ItemShow({item}){
             <div>{item.itemType}</div>
             <div>{item.cost}</div>
             <div>{item.itemStock}</div>
-            <button onClick={handleClick}>Purchase</button>
+            <button onClick={handleClick(item.location)}>Purchase</button>
         </div>
     )
 }
