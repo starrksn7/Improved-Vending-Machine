@@ -2,6 +2,7 @@ import Accordion from "../components/Accordion"
 import ItemList from "../components/ItemList";
 import MachineContext from "../context/machine";
 import DepositButton from "../components/DepositButton";
+import ChangeButton from "../components/ChangeButton";
 import {useEffect, useContext} from 'react';
 
 function AccordionPage() {
@@ -30,7 +31,7 @@ function AccordionPage() {
         {
             id: 3,
             label: "Get Change and Exit",
-            content: <div>Give Change functions go here</div>
+            content: <ChangeButton />
         }    
     ];
 

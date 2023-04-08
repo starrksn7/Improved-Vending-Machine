@@ -7,7 +7,6 @@ function ItemShow({item}){
     const handleClick = location => event => {
         // event.preventDefault();
         makeSale(location);
-        console.log(location);
     };
     
     return (
