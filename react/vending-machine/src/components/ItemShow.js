@@ -14,7 +14,7 @@ function ItemShow({item}){
             <div>{item.location}</div>
             <div>{item.itemName}</div>
             <div>{item.itemType}</div>
-            <div>{item.cost}</div>
+            <div>{Number(item.cost).toFixed(2)}</div>
             <div>{item.itemStock}</div>
             <button onClick={handleClick(item.location)}>Purchase</button>
         </div>
