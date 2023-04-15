@@ -69,7 +69,7 @@ public class JdbcTransactionDao implements TransactionDao {
 
     }
 
-    public String makeSale(String location) {
+    public void makeSale(String location) {
         Item item = new Item();
 
         String sql = "SELECT location_code, item_name, item_cost, item_type, item_stock FROM items " +
@@ -80,7 +80,7 @@ public class JdbcTransactionDao implements TransactionDao {
         if (itemResults.next()) {
             item = mapRowToItem(itemResults);
         } else {
-            return "Please select a valid item";
+            System.out.println("Please select a valid item");
         }
 
         Bank balance = new Bank();
@@ -113,20 +113,7 @@ public class JdbcTransactionDao implements TransactionDao {
                     balance = mapToBank(updateBalanceAfterSaleRowSet);
                 }
 
-                if (item.getLocation().contains("A")) {
-                    return String.format("Crunch, Crunch Yum! Your balance is %s", balance.getBalance());
-                } else if (item.getLocation().contains("B")) {
-                    return String.format("Munch, Munch, Yum! Your balance is %s", balance.getBalance());
-                } else if (item.getLocation().contains("C")) {
-                    return String.format("Glug, Glug Yum! Your balance is %s", balance.getBalance());
-                } else {
-                    return String.format("Chew, Chew Yum! Your balance is %s", balance.getBalance());
-                }
-            } else {
-                return String.format("You do not have enough deposited for that item.  Please deposit %s", item.getCost().subtract(balance.getBalance()));
             }
-        } else {
-            return "That item is currently out of stock";
         }
     }
 

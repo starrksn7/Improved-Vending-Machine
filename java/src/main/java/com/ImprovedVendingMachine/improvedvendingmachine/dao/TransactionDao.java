@@ -12,7 +12,7 @@ public interface TransactionDao {
 
     String depositMoney(BigDecimal transactionAmount) throws JsonParseException;
 
-    String makeSale(String locationCode);
+    void makeSale(String locationCode);
 
     String makeChange();
 }

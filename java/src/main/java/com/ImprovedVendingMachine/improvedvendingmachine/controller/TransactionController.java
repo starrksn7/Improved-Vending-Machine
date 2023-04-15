@@ -38,8 +38,8 @@ public class TransactionController {
         }
 
     @PostMapping(path = "/sell")
-    public String makeSale(@RequestBody Item item){
-       return transactionDao.makeSale(item.getLocation());
+    public void makeSale(@RequestBody Item item){
+       transactionDao.makeSale(item.getLocation());
     }
 
     @PostMapping(path = "/makeChange")

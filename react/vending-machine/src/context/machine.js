@@ -4,6 +4,7 @@ import axios from 'axios';
 const MachineContext = createContext();
 
 function Provider({children}) {
+
     const [items, setItems] = useState([]);
 
     const fetchItems = useCallback(async () => {
@@ -20,6 +21,11 @@ function Provider({children}) {
         
     };
     
+    const getBalance = useCallback(async () => {
+        const response = await axios.get('http://localhost:8080/bank');
+        setBalance(response.data);
+    }, [])
+
     const makeSale = useCallback(async (location) => {
         const response = await axios.post('http://localhost:8080/transaction/sell', {
             location
@@ -30,7 +36,19 @@ function Provider({children}) {
             response.data
         ];
         setItems(updatedItems)
-    }, [items]);
+
+
+        if (location.includes("A")) {
+            alert(`Crunch, Crunch Yum! Your balance is ${getBalance}`);
+        } else if (location.includes("B")) {
+            alert(`Munch, Munch, Yum! Your balance is ${getBalance}`);
+        } else if (location.contains("C")) {
+            alert(`Glug, Glug Yum! Your balance is ${getBalance}`);
+        } else {
+            alert(`Chew, Chew Yum! Your balance is ${getBalance}`);
+        } 
+
+    }, [items, getBalance]);
 
     const makeChange = useCallback(async () => {
         const response = await axios.post('http://localhost:8080/transaction/makeChange');
@@ -44,7 +62,8 @@ function Provider({children}) {
         deposit,
         makeSale,
         makeChange,
-        fetchItems
+        fetchItems,
+        getBalance
     }
 
     return <MachineContext.Provider value={valueToShare}>
