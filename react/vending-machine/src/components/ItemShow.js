@@ -1,23 +1,24 @@
 import useMachineContext from '../hooks/use-machine-context';
 
+
 function ItemShow({item}){
 
     const { makeSale } = useMachineContext();
-    const {getBalance} = useMachineContext();
-
+    const {balance} = useMachineContext();
+    
     const handleClick = location => event => {
         // event.preventDefault();
 
-        console.log(`Balance is ${getBalance()} and the cost is ${Number(item.number)}`)
+        console.log(`Your balance is and the cost is ${Number(item.cost)}`)
         
-        if(getBalance() >= Number(item.cost)){
+        if(balance >= Number(item.cost)){
             if(item.itemStock > 0) {
                         makeSale(location);
                     } else {
                         alert(`That item is currently out of stock`)
                     }
         } else {
-            alert(`You do not have enough deposited for that item. Please deposit ${getBalance - Number(item.cost)}`)
+            alert(`You do not have enough deposited for that item. Please deposit ${balance - Number(item.cost)}`)
         }
     };
     
