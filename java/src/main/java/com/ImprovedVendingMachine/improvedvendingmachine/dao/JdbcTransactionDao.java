@@ -65,7 +65,7 @@ public class JdbcTransactionDao implements TransactionDao {
             return "Please enter a valid amount.";
         }
 
-        return String.format("Your balance is %s", balance.getBalance());
+        return String.format("Your balance is %s", balance.getTotal());
 
     }
 
@@ -95,7 +95,7 @@ public class JdbcTransactionDao implements TransactionDao {
 
         if (item.getItemStock() > 0) {
 
-            if (balance.getBalance().compareTo(item.getCost()) == 0 || balance.getBalance().compareTo(item.getCost()) == 1) {
+            if (balance.getTotal().compareTo(item.getCost()) == 0 || balance.getTotal().compareTo(item.getCost()) == 1) {
                 String transactionSql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
                         "VALUES (?, 'sale', ?); ";
                 jdbcTemplate.update(transactionSql, now, item.getCost());
@@ -131,7 +131,7 @@ public class JdbcTransactionDao implements TransactionDao {
         String sql = "INSERT INTO transactions (transaction_date_time, action_taken, transaction_amount) " +
                 "VALUES (?, 'gave change', ?); ";
 
-        jdbcTemplate.update(sql, now, balance.getBalance());
+        jdbcTemplate.update(sql, now, balance.getTotal());
 
         String zeroBalanceSql = "UPDATE balance SET balance_total = 0.00;";
         jdbcTemplate.update(zeroBalanceSql);
@@ -144,7 +144,7 @@ public class JdbcTransactionDao implements TransactionDao {
         int numOfDimes = 0;
         int numOfNickels = 0;
         int numOfPennies = 0;
-        BigDecimal moneyToReturn = balance.getBalance();
+        BigDecimal moneyToReturn = balance.getTotal();
 
         while (true) {
             if (moneyToReturn.compareTo(quarterValue) == 0 || moneyToReturn.compareTo(quarterValue) == 1) {
@@ -193,7 +193,7 @@ public class JdbcTransactionDao implements TransactionDao {
     private Bank mapToBank(SqlRowSet rowSet) {
         Bank balance = new Bank();
 
-        balance.setBalance(rowSet.getBigDecimal("balance_total"));
+        balance.setTotal(rowSet.getBigDecimal("balance_total"));
 
         return balance;
     }

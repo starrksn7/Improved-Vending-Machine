@@ -21,7 +21,7 @@ public class BankController {
     }
 
     @GetMapping(path = "")
-    public BigDecimal viewBalance(){
-        return balanceDao.viewBalance();
+    public BigDecimal viewTotal(){
+        return balanceDao.viewTotal();
     }
 }

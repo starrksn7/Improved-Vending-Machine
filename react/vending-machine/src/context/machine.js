@@ -36,10 +36,11 @@ function Provider({children}) {
             response.data
         ];
         setItems(updatedItems)
-
+       
 
         if (location.includes("A")) {
-            alert(`Crunch, Crunch Yum! Your balance is ${getBalance}`);
+            console.log({balance});
+            alert(`Crunch, Crunch Yum! Your balance is ${getBalance().total}`);
         } else if (location.includes("B")) {
             alert(`Munch, Munch, Yum! Your balance is ${getBalance}`);
         } else if (location.contains("C")) {
@@ -48,7 +49,7 @@ function Provider({children}) {
             alert(`Chew, Chew Yum! Your balance is ${getBalance}`);
         } 
 
-    }, [items, getBalance]);
+    }, [items, balance, getBalance]);
 
     const makeChange = useCallback(async () => {
         const response = await axios.post('http://localhost:8080/transaction/makeChange');

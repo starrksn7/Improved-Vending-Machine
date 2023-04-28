@@ -17,7 +17,7 @@ public class JdbcBankDao implements BankDao {
     }
 
     @Override
-    public BigDecimal viewBalance(){
+    public BigDecimal viewTotal(){
         Bank balance = new Bank();
         String sql = "SELECT balance_total FROM balance;";
 
@@ -26,13 +26,13 @@ public class JdbcBankDao implements BankDao {
         if (results.next()){
             balance = mapToBank(results);
         }
-        return balance.getBalance();
+        return balance.getTotal();
     }
 
     private Bank mapToBank(SqlRowSet rowSet){
         Bank balance = new Bank();
 
-        balance.setBalance(rowSet.getBigDecimal("balance_total"));
+        balance.setTotal(rowSet.getBigDecimal("balance_total"));
 
         return balance;
     }
