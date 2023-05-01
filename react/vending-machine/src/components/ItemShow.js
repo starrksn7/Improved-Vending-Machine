@@ -10,7 +10,6 @@ function ItemShow({item}){
         event.preventDefault();
         makeSale(item.location);
         
-        console.log(balance)
         if(Number(balance).toFixed(2) >= Number(item.cost).toFixed(2)){
             if(item.itemStock > 0) {
                         makeSale(location);
