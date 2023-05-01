@@ -5,8 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-
 @Component
 public class JdbcBankDao implements BankDao {
 
@@ -17,7 +15,7 @@ public class JdbcBankDao implements BankDao {
     }
 
     @Override
-    public BigDecimal viewTotal(){
+    public Bank viewTotal(){
         Bank balance = new Bank();
         String sql = "SELECT balance_total FROM balance;";
 
@@ -26,7 +24,7 @@ public class JdbcBankDao implements BankDao {
         if (results.next()){
             balance = mapToBank(results);
         }
-        return balance.getTotal();
+        return balance;
     }
 
     private Bank mapToBank(SqlRowSet rowSet){

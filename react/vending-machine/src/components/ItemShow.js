@@ -3,24 +3,22 @@ import BalanceList from './BalanceList';
 
 function ItemShow({item}){
 
-    const { makeSale } = useMachineContext();
-    const {fetchedBalance} = useMachineContext();
+    const { makeSale, balance} = useMachineContext();
+
 
     const handleClick = location => event => {
         event.preventDefault();
         makeSale(item.location);
         
-
-        console.log(`Your balance is ${<BalanceList />} and the cost is ${Number(item.cost)}`)
-        
-        if(Number(fetchedBalance).toFixed(2) >= Number(item.cost).toFixed(2)){
+        console.log(balance)
+        if(Number(balance).toFixed(2) >= Number(item.cost).toFixed(2)){
             if(item.itemStock > 0) {
                         makeSale(location);
                     } else {
                         alert(`That item is currently out of stock`)
                     }
         } else {
-            alert(`You do not have enough deposited for that item. Please deposit ${Number(<BalanceList />).toFixed(2) - Number(item.cost).toFixed(2)}`)
+            alert(`You do not have enough deposited for that item. Please deposit ${Number(balance).toFixed(2) - Number(item.cost).toFixed(2)}`)
         }
     };
     

@@ -11,18 +11,17 @@ function Provider({children}) {
         const response = await axios.get('http://localhost:8080/items');
         setItems(response.data);
     }, []);
-
-    const[fetchedBalance, setBalance] = useState([]);
    
     const deposit = async (amount) => {
         await axios.post('http://localhost:8080/transaction/deposit', {
             transactionAmount: amount
         });
-        
     };
     
+    const[balance, setBalance] = useState([]);
+    
     const getBalance = useCallback(async () => {
-        const response = await axios.get('http://localhost:8080/bank');
+        const response = await axios.get('http://localhost:8080/bank'); 
         setBalance(response.data);
     }, [])
 
@@ -36,20 +35,7 @@ function Provider({children}) {
             response.data
         ];
         setItems(updatedItems)
-       
-
-        if (location.includes("A")) {
-            console.log({fetchedBalance});
-            alert(`Crunch, Crunch Yum! Your balance is ${getBalance()}`);
-        } else if (location.includes("B")) {
-            alert(`Munch, Munch, Yum! Your balance is ${getBalance}`);
-        } else if (location.contains("C")) {
-            alert(`Glug, Glug Yum! Your balance is ${getBalance}`);
-        } else {
-            alert(`Chew, Chew Yum! Your balance is ${getBalance}`);
-        } 
-
-    }, [items, fetchedBalance, getBalance]);
+    }, [items]);
 
     const makeChange = useCallback(async () => {
         const response = await axios.post('http://localhost:8080/transaction/makeChange');
@@ -59,7 +45,7 @@ function Provider({children}) {
 
     const valueToShare = {
         items,
-        fetchedBalance,
+        balance,
         deposit,
         makeSale,
         makeChange,

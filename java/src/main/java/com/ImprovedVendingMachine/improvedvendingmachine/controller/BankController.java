@@ -1,12 +1,11 @@
 package com.ImprovedVendingMachine.improvedvendingmachine.controller;
 
 import com.ImprovedVendingMachine.improvedvendingmachine.dao.BankDao;
+import com.ImprovedVendingMachine.improvedvendingmachine.model.Bank;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/bank")
@@ -21,7 +20,7 @@ public class BankController {
     }
 
     @GetMapping(path = "")
-    public BigDecimal viewTotal(){
+    public Bank viewTotal(){
         return balanceDao.viewTotal();
     }
 }

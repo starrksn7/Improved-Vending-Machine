@@ -1,9 +1,9 @@
 package com.ImprovedVendingMachine.improvedvendingmachine.dao;
 
-import java.math.BigDecimal;
+import com.ImprovedVendingMachine.improvedvendingmachine.model.Bank;
 
 public interface BankDao {
 
-    BigDecimal viewTotal();
+    Bank viewTotal();
 
 }
