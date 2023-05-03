@@ -9,18 +9,19 @@ function ItemShow({item}){
     const handleClick = location => event => {
         event.preventDefault();
         console.log(balance.total);
+       
         
-        if(Number(balance.total).toFixed(2) >= Number(item.cost).toFixed(2)){
+        if(balance.total >= item.cost){
             if(item.itemStock > 0) {
                         makeSale(location);
                         if(item.location.includes('A')){
-                            alert(`Crunch! Crunch! Yum! Enjoy your chips!  Your remaining balance is ${Number(Number(balance.total).toFixed(2) - Number(item.cost).toFixed(2)).toFixed(2)}`)
+                            alert(`Crunch! Crunch! Yum! Enjoy your chips!  Your remaining balance is ${Number(balance.total - item.cost).toFixed(2)}`)
                         } else if(location.includes('B')){
-                            alert(`Munch! Munch! Yum! Enjoy your candy!  Your remaining balance is ${Number(Number(balance.total).toFixed(2) - Number(item.cost).toFixed(2)).toFixed(2)}`)
+                            alert(`Munch! Munch! Yum! Enjoy your candy!  Your remaining balance is ${Number(balance.total - item.cost).toFixed(2)}`)
                         } else if(location.includes('C')){
-                            alert(`Glug! Glug! Yum! Enjoy your drink!  Your remaining balance is ${Number(Number(balance.total).toFixed(2) - Number(item.cost).toFixed(2)).toFixed(2)}`)
+                            alert(`Glug! Glug! Yum! Enjoy your drink!  Your remaining balance is ${Number(balance.total - item.cost).toFixed(2)}`)
                         } else {
-                            alert(`Chew! Chew! Yum! Enjoy your gum!  Your remaining balance is ${Number(Number(balance.total).toFixed(2) - Number(item.cost).toFixed(2)).toFixed(2)}`)
+                            alert(`Chew! Chew! Yum! Enjoy your gum!  Your remaining balance is ${Number(balance.total - item.cost).toFixed(2)}`)
                         }
                     } else {
                         alert(`That item is currently out of stock`)
