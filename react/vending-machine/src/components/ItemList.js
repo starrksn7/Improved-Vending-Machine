@@ -2,10 +2,10 @@ import ItemShow from "./ItemShow";
 import useMachineContext from "../hooks/use-machine-context";
 
 function ItemList(){
-    const {items, balance} = useMachineContext();
+    const {items} = useMachineContext();
 
     const renderedItems = items.map((item) => {
-        console.log(balance);
+       
         return <ItemShow key={item.location} item={item} />
     });
 

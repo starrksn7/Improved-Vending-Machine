@@ -7,15 +7,13 @@ import {useEffect, useContext} from 'react';
 
 function AccordionPage() {
 
-    const {fetchItems, deposit} = useContext(MachineContext);
-
-    useEffect(() => {
-        fetchItems();
-    }, [fetchItems])
+    const {fetchItems, deposit, getBalance} = useContext(MachineContext);
 
     useEffect((amount) => {
-        deposit(amount)
-    }, [deposit])
+        fetchItems();
+        deposit(amount);
+        getBalance();
+    }, [fetchItems, deposit, getBalance])
 
     const sections = [
         {
