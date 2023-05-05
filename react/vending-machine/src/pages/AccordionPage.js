@@ -29,14 +29,17 @@ function AccordionPage() {
         {
             id: 3,
             label: "Get Change and Exit",
-            content: <ChangeButton />
+            content: <div><ChangeButton /> </div>
         }    
     ];
 
     
 
-    return <Accordion sections={sections} />
-
+    return (
+        <div class="accordion">
+            <Accordion sections={sections} />
+        </div>
+    )
 }
 
 export default AccordionPage;

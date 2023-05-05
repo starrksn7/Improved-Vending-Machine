@@ -18,7 +18,7 @@ function Accordion({sections}){
         const isExpanded = index === expandedIndex;
 
         return (
-            <div key={section.id}>
+            <div class="accordion-item" key={section.id}>
                 <div onClick={() => handleClick(index)}>
                     {section.label}
                 </div>

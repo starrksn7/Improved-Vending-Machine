@@ -9,9 +9,21 @@ function ItemList(){
         return <ItemShow key={item.location} item={item} />
     });
 
-    return <div className='item-list'>
-        {renderedItems}
-    </div>;
+    return (
+    <div>
+        <div className='info-list'>
+            <div>Item Number</div>
+            <div>Name</div>
+            <div>Item Type</div>
+            <div>Cost</div>
+            <div>Current Stock</div>
+            <div>Click to Buy</div>
+        </div>
+        <div class="item-list">
+           {renderedItems} 
+        </div>   
+    </div>
+    )
 }
 
 export default ItemList;

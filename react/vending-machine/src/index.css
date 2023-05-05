@@ -1,0 +1,40 @@
+body {
+    background-color: #34AAE1;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.accordion {
+    background-color: white;
+    display: flex;
+    /* justify-content: flex-start; */
+    border-radius: 10px;
+    font-size: large;
+    width: 40em;
+}
+
+.accordion-item {
+    margin: 5px;
+    border: gray;
+    border-width: 2px;
+}
+
+button {
+    margin-right: 5px;
+}
+
+.info-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.intro {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5em;
+}

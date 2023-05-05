@@ -136,38 +136,10 @@ public class JdbcTransactionDao implements TransactionDao {
         String zeroBalanceSql = "UPDATE balance SET balance_total = 0.00;";
         jdbcTemplate.update(zeroBalanceSql);
 
-        BigDecimal quarterValue = new BigDecimal(".25");
-        BigDecimal dimeValue = new BigDecimal(".10");
-        BigDecimal nickelValue = new BigDecimal(".05");
-        BigDecimal pennyValue = new BigDecimal(".01");
-        int numOfQuarters = 0;
-        int numOfDimes = 0;
-        int numOfNickels = 0;
-        int numOfPennies = 0;
-        BigDecimal moneyToReturn = balance.getTotal();
-
-        while (true) {
-            if (moneyToReturn.compareTo(quarterValue) == 0 || moneyToReturn.compareTo(quarterValue) == 1) {
-                moneyToReturn = moneyToReturn.subtract(quarterValue);
-                numOfQuarters++;
-            } else if (moneyToReturn.compareTo(dimeValue) == 0 || moneyToReturn.compareTo(dimeValue) == 1) {
-                moneyToReturn = moneyToReturn.subtract(dimeValue);
-                numOfDimes++;
-            } else if (moneyToReturn.compareTo(nickelValue) == 0 || moneyToReturn.compareTo(nickelValue) == 1) {
-                moneyToReturn = moneyToReturn.subtract(nickelValue);
-                numOfNickels++;
-            } else if (moneyToReturn.compareTo(pennyValue) == 0 || moneyToReturn.compareTo(pennyValue) == 1) {
-                moneyToReturn = moneyToReturn.subtract(pennyValue);
-                numOfPennies++;
-            } else {
-                break;
-            }
-        }
-
         String restockItemsSql = "UPDATE items SET item_stock = 5 WHERE item_stock < 5;";
         jdbcTemplate.update(restockItemsSql);
 
-        return String.format("Your change is %s quarters, %s dimes, %s nickels, and %s pennies", numOfQuarters, numOfDimes, numOfNickels, numOfPennies);
+        return "Change given";
     }
 
 
