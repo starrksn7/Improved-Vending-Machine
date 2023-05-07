@@ -11,16 +11,15 @@ body {
 .accordion {
     background-color: white;
     display: flex;
-    /* justify-content: flex-start; */
     border-radius: 10px;
     font-size: large;
-    width: 40em;
 }
 
 .accordion-item {
     margin: 5px;
     border: gray;
     border-width: 2px;
+    flex-grow: 1;
 }
 
 button {
@@ -30,11 +29,19 @@ button {
 .info-list {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
 .intro {
     display: flex;
     justify-content: center;
     font-size: 1.5em;
+}
+
+.item-list {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
 }

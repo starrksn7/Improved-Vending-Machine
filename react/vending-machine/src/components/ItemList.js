@@ -19,7 +19,7 @@ function ItemList(){
             <div>Current Stock</div>
             <div>Click to Buy</div>
         </div>
-        <div class="item-list">
+        <div>
            {renderedItems} 
         </div>   
     </div>

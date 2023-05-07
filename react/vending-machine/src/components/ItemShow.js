@@ -32,7 +32,7 @@ function ItemShow({item}){
     };
     
     return (
-        <div>
+        <div class="item-list">
             <div>{item.location}</div>
             <div>{item.itemName}</div>
             <div>{item.itemType}</div>
