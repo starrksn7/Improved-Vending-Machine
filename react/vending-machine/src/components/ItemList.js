@@ -11,15 +11,7 @@ function ItemList(){
 
     return (
     <div>
-        <div className='info-list'>
-            <div>Item Number</div>
-            <div>Name</div>
-            <div>Item Type</div>
-            <div>Cost</div>
-            <div>Current Stock</div>
-            <div>Click to Buy</div>
-        </div>
-        <div>
+        <div className="item-box">
            {renderedItems} 
         </div>   
     </div>

@@ -32,12 +32,10 @@ function ItemShow({item}){
     };
     
     return (
-        <div class="item-list">
-            <div>{item.location}</div>
+        <div className="item-list">
             <div>{item.itemName}</div>
-            <div>{item.itemType}</div>
-            <div>{Number(item.cost).toFixed(2)}</div>
-            <div>{item.itemStock}</div>
+            <div>${Number(item.cost).toFixed(2)}</div>
+            <div>In Stock: {item.itemStock}</div>
             <button onClick={handleClick(item.location)}>Purchase</button>
         </div>
     )

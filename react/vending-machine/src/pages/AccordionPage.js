@@ -36,8 +36,8 @@ function AccordionPage() {
     
 
     return (
-        <div class="accordion">
-            <Accordion sections={sections} />
+        <div className="accordion">
+            <Accordion sections={sections} className="accordion-container"/>
         </div>
     )
 }
